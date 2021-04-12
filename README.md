@@ -6,10 +6,10 @@ This is a repository for frame-wise source localization based on PyTorch
 
 
 # How to train
-
+./train.sh
 
 # How to evaluate
-
+./test.sh
 
 # Citation
 
