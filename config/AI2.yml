@@ -1,0 +1,83 @@
+
+use_tb_logger: true
+
+#### datasets
+datasets:
+  enhanced: /home/nas/DB/AI_grand_challenge_2020/jungwook_test/wind_train_pkl2minsuk/2_vad
+  # enhanced: /home/nas/user/minseok/AI_example/2_VAD
+  # enhanced: /home/nas/user/jungwook/AI_2018/AOSE_Unet/minsuk8000/2_vad
+  VAD: /home/nas/user/minseok/AI_example/2_vad
+  test: 2_VAD
+  # test: enhanced
+
+  
+dataloader:
+  train:
+    batch_size: 1
+    shuffle: true
+    # pin_memeory: true
+    num_workers: 0
+
+  valid:
+    batch_size: 1
+    shuffle: true
+    # pin_memeory: true
+    num_workers: 0
+
+  test:
+    batch_size: 1
+    shuffle: false
+    # pin_memeory: true
+    num_workers: 50
+
+#### network structures
+MYNET:
+  embed_size: 8
+  sequence_size: 16 # Temporal duration of input clips
+  encoder: resnet50
+  n_classes: 2
+  input_size: 224
+  pretrained: true
+  num_layers: 1
+  bidirectional: false
+
+#### training settings: learning rate scheme, loss
+trainer:
+  epochs: 10000
+  device: 1
+  save_path: /home/nas/user/minseok/AI_GATED_CRNN10
+  #ckpt_path: /home/nas/user/minseok/FINAL1120/2/20November_0241/ckpt/24_92.0000.pt
+  comment: no comment
+
+tester:
+  # ckpt_path: /home/nas/user/minseok/exp_AI/Final_noisy/2/19November_0232/ckpt/15_96.5468.pt 
+  ckpt_path: /home/nas/user/minseok/exp_AI/AI_whole/2/18November_1249/ckpt/26_94.0220.pt 
+  #ckpt_path: /home/nas/user/minseok/GATED_CYCLE_FINAL/2/19November_0903/ckpt/best.pt
+  # ckpt_path: /home/nas/user/minseok/8500_REAL_FINAL/2/20November_0546/ckpt/best.pt
+  device: 1 
+
+
+criterion:
+  #name: regression
+  name: BCEWithLogits
+
+#### Optimizer settings
+# optimizer:
+#   name: Adam   ### Adam, RMSprop, SGD
+#   lr: !!float 1e-3
+#   weight_decay: 0
+#   eps: !!float 1e-3
+optimizer:
+  name: Adam   ### Adam, RMSprop, SGD
+  lr: !!float 1e-4
+  # betas: (0.9, 0.999)
+  eps: !!float 1e-8
+  weight_decay: !!float 1e-3
+
+
+#### scheduler settings
+scheduler:
+  name: cycle
+  min_lr: !!float 1e-8
+  patience: 2
+  factor: 0.5

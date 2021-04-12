@@ -1,0 +1,91 @@
+#### general settings
+name: MYNET
+use_tb_logger: true
+
+#### datasets
+datasets:
+  train: enhanced
+  valid: enhanced
+
+dataloader:
+  train:
+    batch_size: 1
+    shuffle: true
+    # pin_memeory: true
+    num_workers: 0
+
+  valid:
+    batch_size: 1
+    shuffle: true
+    # pin_memeory: true
+    num_workers: 1
+
+  test:
+    batch_size: 1
+    shuffle: false
+    # pin_memeory: true
+    num_workers: 50
+
+#### network structures
+MYNET:
+  embed_size: 8
+  sequence_size: 16 # Temporal duration of input clips
+  encoder: resnet50
+  n_classes: 2
+  input_size: 224
+  pretrained: true
+  num_layers: 1
+  bidirectional: false
+
+#### training settings: learning rate scheme, loss
+trainer:
+  epochs: 10000
+  device: 0
+  save_path: /home/nas/user/minseok/exp_AI/AI_tmp
+  # ckpt_path: /home/nas/user/minseok/exp/GLOTTIS_MULT_VAP/RWF/14September_1215/ckpt/best.pt
+  comment: no comment
+
+tester:
+  # ckpt_path: ./ckpt/AI_HUB/July_16/303_107.5899.pt
+  ckpt_path: /home/minseok/Video_Action_Recognition/Video-Action-Recognition-RGB/ckpt/AI_HUB_DEMO/0824_new/August_24/0_99.0099.pt
+  device: 0 
+
+
+criterion:
+  # name: CTCLoss
+  name: CrossEntropy
+
+#### Optimizer settings
+# optimizer:
+#   name: Adam   ### Adam, RMSprop, SGD
+#   lr: !!float 1e-3
+#   weight_decay: 0
+#   eps: !!float 1e-3
+optimizer:
+  name: Adam   ### Adam, RMSprop, SGD
+  lr: !!float 1e-4
+  # betas: (0.9, 0.999)
+  eps: !!float 1e-8
+  weight_decay: !!float 1e-3
+
+
+#### scheduler settings
+scheduler:
+  name: plateau
+  min_lr: !!float 1e-8
+  patience: 2
+  factor: 0.5
+
+# #### Resume training settings
+# resume:
+#   state: false
+#   path: /home/minseok/Dual-Path-RNN/checkpoint
+
+
+# #### logger
+# logger:
+#   name: DPCL
+#   path: /home/minseok/Dual-Path-RNN-Pytorch/checkpoint
+#   screen: false
+#   tofile: true
+#   print_freq: 1000
