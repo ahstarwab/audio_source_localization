@@ -73,7 +73,7 @@ class Audio_Reader(Dataset):
     def __init__(self, datalist):
         super(Audio_Reader, self).__init__()
         self.datalist = datalist
-        
+
         self.nfft = 512
         self.hopsize = self.nfft // 4
         self.window = 'hann'
@@ -104,13 +104,12 @@ class Audio_Reader(Dataset):
         def transform(audio):
 
             channel_num = audio.shape[0]
-            feature_logmel = []
+            feature = []
             for n in range(channel_num):
-                feature_logmel.append(mag(audio[n]))
+                feature.append(mag(audio[n]))
 
-            feature_logmel = vad(feature_logmel)
-            # feature_logmel = np.concatenate(feature_logmel, axis=0)
-            return feature_logmel
+            feature = vad(feature)
+            return feature
         
         return transform(sig)
 
@@ -165,8 +164,8 @@ class Audio_Reader(Dataset):
             audio_noisy = self.vad_sanghoon(audio_noisy, time)
             audio_enhanced, indices = self.vad(audio_enhanced)
             audio_noisy = audio_noisy[:, indices]
-            feature_enhanced = self.LogMelGccExtractor(audio_enhanced)
-            feature_noisy = self.LogMelGccExtractor(audio_noisy)
+            feature_enhanced = self.FeatureExtractor(audio_enhanced)
+            feature_noisy = self.FeatureExtractor(audio_noisy)
             
             '''(channels, seq_len, mel_bins)'''
             # pdb.set_trace()
